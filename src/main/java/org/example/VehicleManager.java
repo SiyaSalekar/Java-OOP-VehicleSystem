@@ -59,5 +59,14 @@ public class VehicleManager {
     }
 
     //TODO add more functionality as per spec.
+    public Vehicle findByRegisterationNumber(String reg){
+        for(Vehicle v: vehicleList) {
+            if (reg.equals(v.getRegistration())){
+                return v;
+            }
+
+        }
+        return null;
+    }
 
 }
