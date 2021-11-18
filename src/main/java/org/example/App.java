@@ -45,6 +45,13 @@ public class App
             System.out.println(foundByRegNum);
         }
 
+        //Add passenger to the list
+        passengerStore.addPassenger("Joseph Bailey","jobal@yahoo.com","0830916079",0.99,0.88);
+        passengerStore.addPassenger("Joseph Bailey","jobal@yahoo.com","0830916079",0.99,0.88);
+
+        System.out.println("List of all passengers After adding Siya:");
+        passengerStore.displayAllPassengers();
+
         System.out.println("Program exiting... Goodbye");
     }
 }

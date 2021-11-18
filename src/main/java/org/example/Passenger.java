@@ -31,6 +31,19 @@ public class Passenger {
         this.location = new LocationGPS(latitude, longitude);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Passenger)) return false;
+        Passenger passenger = (Passenger) o;
+        return Objects.equals(getName(), passenger.getName()) && Objects.equals(getEmail(), passenger.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getEmail());
+    }
+
     // Version of constructor called when the passenger id is known,
     // as it was read from the "passengers.txt" file.
     //

@@ -24,6 +24,19 @@ public class PassengerStore {
             System.out.println(p.toString());
         }
     }
+    public void addPassenger(String name, String email, String phone, double latitude, double longitude){
+        Passenger newPassenger = new Passenger(name, email, phone,latitude, longitude);
+        boolean found = false;
+        for(Passenger p: this.passengerList){
+            if(newPassenger.equals(p)){
+                found = true;
+                break;
+            }
+        }
+        if(found == false){
+            passengerList.add(newPassenger);
+        }
+    }
 
     /**
      * Read Passenger records from a text file and create and add Passenger
