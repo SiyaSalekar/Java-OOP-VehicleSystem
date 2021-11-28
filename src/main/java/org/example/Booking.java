@@ -3,7 +3,7 @@ package org.example;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-class Booking
+class Booking implements Comparable<Booking>
 {
     private int bookingId;
     private int passengerId;
@@ -16,6 +16,16 @@ class Booking
     private IdGenerator idGenerator = IdGenerator.getInstance("next-id-store.txt");  // get access to the id Generator
 
     //TODO - see specification
+
+    @Override
+    public int compareTo( Booking other ) {
+
+        if( this.cost < other.cost )
+            return -1;
+        else if( this.cost == other.cost)
+            return 0;
+        else return 1;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -39,6 +49,15 @@ class Booking
         this.endLocation = new LocationGPS(endLatitude,endLongitude);
         this.cost = cost;
     }
+    public Booking(int passengerId, int vehicleId, int year, int month, int day, int hour, int min, int sec, double startLatitude, double endLatitude, double startLongitude, double endLongitude, double cost) {
+        this.bookingId = idGenerator.getNextId();;
+        this.passengerId = passengerId;
+        this.vehicleId = vehicleId;
+        this.bookingDateTime = LocalDateTime.of(year,month,day,hour,min,sec);
+        this.startLocation = new LocationGPS(startLatitude,startLongitude);
+        this.endLocation = new LocationGPS(endLatitude,endLongitude);
+        this.cost = cost;
+    }
 
 
     @Override
@@ -51,19 +70,10 @@ class Booking
                 ", startLocation=" + startLocation +
                 ", endLocation=" + endLocation +
                 ", cost=" + cost +
-                ", idGenerator=" + idGenerator +
                 '}';
     }
 
-    public Booking(int passengerId, int vehicleId, int year, int month, int day, int hour, int min, int sec, double startLatitude, double endLatitude, double startLongitude, double endLongitude, double cost) {
-        this.bookingId = idGenerator.getNextId();;
-        this.passengerId = passengerId;
-        this.vehicleId = vehicleId;
-        this.bookingDateTime = LocalDateTime.of(year,month,day,hour,min,sec);
-        this.startLocation = new LocationGPS(startLatitude,startLongitude);
-        this.endLocation = new LocationGPS(endLatitude,endLongitude);
-        this.cost = cost;
-    }
+
 
     public int getBookingId() {
         return bookingId;

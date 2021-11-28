@@ -24,6 +24,9 @@ public class AppMenu {
             // create VehicleManager, and load all vehicles from text file
             vehicleManager = new VehicleManager("vehicles.txt");
 
+            //create BookingManager, and load all bookings from bookings.txt file
+            bookingManager = new BookingManager("bookings.txt");
+
             try {
                 displayMainMenu();        // User Interface - Menu
             } catch (IOException e) {
@@ -68,6 +71,7 @@ public class AppMenu {
                             break;
                         case BOOKINGS:
                             System.out.println("Bookings option chosen");
+                            displayBookingMenu();
                             break;
                         case EXIT:
                             System.out.println("Exit Menu option chosen");
@@ -304,6 +308,52 @@ public class AppMenu {
         }catch (InputMismatchException e){
             System.out.println("Invalid ID");
         }
+
+    }
+
+    //Booking Sub Menu
+    public void displayBookingMenu(){
+        final String MENU_ITEMS = "\n*** BOOKING MENU ***\n"
+                + "1. Show all bookings\n"
+                + "2. Sort by Cost\n"
+                + "3. Exit\n"
+                + "Enter Option [1,4]";
+
+        final int SHOW_ALL = 1;
+        final int SORT_COST = 2;
+        final int EXIT = 3;
+
+        Scanner keyboard = new Scanner(System.in);
+        int option = 0;
+        do {
+            System.out.println("\n" + MENU_ITEMS);
+            try {
+                String usersInput = keyboard.nextLine();
+                option = Integer.parseInt(usersInput);
+                switch (option) {
+                    case SHOW_ALL:
+                        System.out.println("Display ALL bookings");
+                        bookingManager.displayAllBookings();
+                        break;
+                    case SORT_COST:
+                        System.out.println("--Bookings Ordered By Cost--");
+                        ArrayList<Booking> bookingSort = bookingManager.sortByCost();
+                        for(Booking bs : bookingSort) {
+                            System.out.println(bs.toString());
+                        }
+                        break;
+                    case EXIT:
+                        System.out.println("Exit Menu option chosen");
+                        break;
+                    default:
+                        System.out.print("Invalid option - please enter number in range");
+                        break;
+                }
+
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.print("Invalid option - please enter number in range");
+            }
+        } while (option != EXIT);
 
     }
 }
