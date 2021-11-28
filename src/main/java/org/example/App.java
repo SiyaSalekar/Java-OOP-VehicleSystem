@@ -7,11 +7,11 @@ package org.example;
  * This program reads from 3 text files:
  * "vehicles.txt", "passengers.txt", and "next-id-store.txt"
  * You should be able to see them in the project pane.
- * You will create "bookings.txt" at a later stage, to store booking records.
+ * You will create "bookings.txt.txt" at a later stage, to store booking records.
  *
  * "next-id-store.txt" contains one number ("201"), which will be the
  * next auto-generated id to be used to when new vehicles, passengers, or
- * bookings are created.  The value in the file will be updated when new objects
+ * bookings.txt are created.  The value in the file will be updated when new objects
  * are created - but not when objects are recreated from records in
  * the files - as they already have IDs.  Dont change it - it will be updated by
  * the IdGenerator class.
@@ -37,7 +37,7 @@ public class App
         //findByRegNumber
         System.out.println();
         System.out.println("Find By Registration number: \"172LH234106\" ; ");
-        Vehicle foundByRegNum = vehicleManager.findByRegisterationNumber("12LH234106");
+        Vehicle foundByRegNum = vehicleManager.findByRegistrationNumber("12LH234106");
         if(foundByRegNum == null) {
             System.out.println("Not found");
         }

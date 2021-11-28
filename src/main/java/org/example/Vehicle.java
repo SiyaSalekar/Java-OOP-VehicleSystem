@@ -1,8 +1,9 @@
 package org.example;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
-public abstract class Vehicle
+public abstract class Vehicle implements Comparable<Vehicle>
 {
     private IdGenerator idGenerator = IdGenerator.getInstance("next-id-store.txt");  // get access to the id Generator
 
@@ -59,6 +60,11 @@ public abstract class Vehicle
         this.depotGPSLocation = new LocationGPS(latitude,longitude);
     }
 
+    @Override
+    public int compareTo( Vehicle other ) {
+        return (this.registration.compareTo(other.registration));//-ve 0 or +ve
+    }
+
     public int getId() {
         return id;
     }
@@ -76,6 +82,9 @@ public abstract class Vehicle
     {
         return model;
     }
+
+
+
     public void setModel(String model)
     {
         this.model = model;

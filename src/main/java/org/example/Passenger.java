@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Passenger {
+public class Passenger implements Comparable<Passenger> {
     private int id;
     private String name;
     private String email;
@@ -32,10 +32,16 @@ public class Passenger {
     }
 
     @Override
+    public int compareTo( Passenger other ) {
+        return (this.name.compareTo(other.name));//-ve 0 or +ve
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Passenger)) return false;
         Passenger passenger = (Passenger) o;
+        //two users can register with same email but must have different logins(names) i.e (diff names && diff emails)
         return Objects.equals(getName(), passenger.getName()) && Objects.equals(getEmail(), passenger.getEmail());
     }
 

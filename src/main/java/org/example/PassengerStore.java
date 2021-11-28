@@ -3,6 +3,7 @@ package org.example;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,19 +25,7 @@ public class PassengerStore {
             System.out.println(p.toString());
         }
     }
-    public void addPassenger(String name, String email, String phone, double latitude, double longitude){
-        Passenger newPassenger = new Passenger(name, email, phone,latitude, longitude);
-        boolean found = false;
-        for(Passenger p: this.passengerList){
-            if(newPassenger.equals(p)){
-                found = true;
-                break;
-            }
-        }
-        if(found == false){
-            passengerList.add(newPassenger);
-        }
-    }
+
 
     /**
      * Read Passenger records from a text file and create and add Passenger
@@ -69,5 +58,37 @@ public class PassengerStore {
     }
 
     // TODO - see functional spec for details of code to add
+    public Passenger findPassengerByName(String name){
+        for(Passenger p : passengerList){
+            if(p.getName().equalsIgnoreCase(name)){
+                return p;
+            }
+        }
+        return null;
+    }
+    public void addPassenger(String name, String email, String phone, double latitude, double longitude){
+        IdGenerator idGenerator = IdGenerator.getInstance("next-id-store.txt");
+        int id = idGenerator.getNextId();
+        Passenger newPassenger = new Passenger(id,name, email, phone,latitude, longitude);
+        boolean found = false;
+        for(Passenger p: this.passengerList){
+            if(newPassenger.equals(p)){
+                found = true;
+                System.out.println("Cannot add passenger - Duplicate exists");
+                break;
+            }
+        }
+        if(found == false){
+            passengerList.add(newPassenger);
+            System.out.println("Passenger added");
+        }
+    }
+
+    public ArrayList<Passenger> sortByName(){
+        ArrayList<Passenger> passengerSort = new ArrayList<>();
+        passengerSort.addAll(passengerList);
+        Collections.sort(passengerSort);
+        return passengerSort;
+    }
 
 } // end class
