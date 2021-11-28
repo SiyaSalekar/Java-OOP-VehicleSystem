@@ -14,8 +14,7 @@ public class AppMenu {
         BookingManager bookingManager;  // deals with all bookings
 
         public static void main(String[] args) {
-            AppMenu app = new AppMenu();
-            app.start();
+
         }
 
         public void start() {
@@ -33,6 +32,7 @@ public class AppMenu {
 
         }
 
+        //Main Menu
         private void displayMainMenu() throws IOException {
 
             final String MENU_ITEMS = "\n*** MAIN MENU OF OPTIONS ***\n"
@@ -88,7 +88,7 @@ public class AppMenu {
         }
 
         // Sub-Menu for Passenger operations
-        //
+
         private void displayPassengerMenu() {
             final String MENU_ITEMS = "\n*** PASSENGER MENU ***\n"
                     + "1. Show all Passengers\n"
@@ -150,6 +150,7 @@ public class AppMenu {
             } while (option != EXIT);
 
         }
+        //sub menu to add passenger
         public void displayAddPassengerMenu(){
             Scanner keyboard = new Scanner(System.in);
                 try {
@@ -172,6 +173,7 @@ public class AppMenu {
 
         }
 
+        //Vehicle Sub menu
         public void displayVehicleMenu(){
             final String MENU_ITEMS = "\n*** VEHICLE MENU ***\n"
                     + "1. Show all Vehicles\n"
@@ -179,7 +181,7 @@ public class AppMenu {
                     + "3. Display Vehicle by Type\n"
                     + "4. Add Vehicle\n"
                     + "5. Sort by Registration Number\n"
-                    + "6. Delete Vehicle by - Registration Number\n"
+                    + "6. Delete Vehicle by - ID\n"
                     + "7. Exit\n"
                     + "Enter Option [1,3]";
 
@@ -249,6 +251,7 @@ public class AppMenu {
             } while (option != EXIT);
         }
 
+        //Vehicle sub menu for add vehicle
     public void displayAddVehicleMenu(){
         Scanner keyboard = new Scanner(System.in);
             try {
@@ -291,6 +294,7 @@ public class AppMenu {
                 System.out.println();
             }
     }
+    //delete vehicle Submenu
     public void displayDeleteMenu(){
         Scanner kb = new Scanner(System.in);
         System.out.println("Enter ID of Vehicle to be Deleted");

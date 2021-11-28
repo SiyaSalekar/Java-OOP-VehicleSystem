@@ -1,6 +1,7 @@
 package org.example;
 
 import java.time.LocalDate;
+import java.util.Locale;
 import java.util.Objects;
 
 public abstract class Vehicle implements Comparable<Vehicle>
@@ -137,6 +138,19 @@ public abstract class Vehicle implements Comparable<Vehicle>
     public void setType(String type)
     {
         this.type = type;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vehicle)) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return Objects.equals(getModel().toLowerCase(), vehicle.getModel().toLowerCase())&& Objects.equals(getType().toLowerCase(), vehicle.getType().toLowerCase());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getModel(),getType());
     }
 
     @Override

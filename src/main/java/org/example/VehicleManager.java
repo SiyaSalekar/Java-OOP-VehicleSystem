@@ -11,6 +11,10 @@ import java.util.Scanner;
 public class VehicleManager {
     private final ArrayList<Vehicle> vehicleList;  // for Car and Van objects
 
+    public ArrayList<Vehicle> getVehicleList() {
+        return vehicleList;
+    }
+
     public VehicleManager(String fileName) {
         this.vehicleList = new ArrayList<>();
         loadVehiclesFromFile(fileName);

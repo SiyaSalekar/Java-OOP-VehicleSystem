@@ -16,7 +16,7 @@ public class PassengerStore {
         loadPassengerDataFromFile(fileName);
     }
 
-    public List<Passenger> getAllPassengers() {
+    public ArrayList<Passenger> getAllPassengers() {
         return this.passengerList;
     }
 
@@ -58,6 +58,7 @@ public class PassengerStore {
     }
 
     // TODO - see functional spec for details of code to add
+
     public Passenger findPassengerByName(String name){
         for(Passenger p : passengerList){
             if(p.getName().equalsIgnoreCase(name)){

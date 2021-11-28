@@ -42,7 +42,7 @@ public class Passenger implements Comparable<Passenger> {
         if (!(o instanceof Passenger)) return false;
         Passenger passenger = (Passenger) o;
         //two users can register with same email but must have different logins(names) i.e (diff names && diff emails)
-        return Objects.equals(getName(), passenger.getName()) && Objects.equals(getEmail(), passenger.getEmail());
+        return Objects.equals(getName().toLowerCase(), passenger.getName().toLowerCase()) && Objects.equals(getEmail().toLowerCase(), passenger.getEmail().toLowerCase());
     }
 
     @Override
