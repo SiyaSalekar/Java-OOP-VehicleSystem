@@ -1,6 +1,7 @@
 package org.example;
 
-import javax.security.auth.kerberos.KerberosKey;
+
+import java.awt.print.Book;
 import java.io.IOException;
 import java.time.DateTimeException;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class AppMenu {
             vehicleManager = new VehicleManager("vehicles.txt");
 
             //create BookingManager, and load all bookings from bookings.txt file
-            bookingManager = new BookingManager("bookings.txt");
+            bookingManager = new BookingManager("bookings.txt",passengerStore,vehicleManager);
 
             try {
                 displayMainMenu();        // User Interface - Menu
@@ -75,6 +76,9 @@ public class AppMenu {
                             break;
                         case EXIT:
                             System.out.println("Exit Menu option chosen");
+                            passengerStore.storeToFilePassenger();
+                            vehicleManager.storeToFileVehicle();
+                            bookingManager.storeToFileBooking();
                             break;
                         default:
                             System.out.print("Invalid option - please enter number in range");
@@ -94,21 +98,25 @@ public class AppMenu {
         // Sub-Menu for Passenger operations
 
         private void displayPassengerMenu() {
+            Scanner keyboard = new Scanner(System.in);
             final String MENU_ITEMS = "\n*** PASSENGER MENU ***\n"
                     + "1. Show all Passengers\n"
                     + "2. Find Passenger by Name\n"
                     + "3. Add Passenger\n"
                     + "4. Sort Passenger by Name\n"
-                    + "5. Exit\n"
-                    + "Enter Option [1,4]";
+                    + "5. Edit Passenger\n"
+                    + "6. Delete Passenger\n"
+                    + "7. Exit\n"
+                    + "Enter Option [1,7]";
 
             final int SHOW_ALL = 1;
             final int FIND_BY_NAME = 2;
             final int ADD_PASSENGER = 3;
             final int SORT_NAME = 4;
-            final int EXIT = 5;
+            final int EDIT_PASSENGER = 5;
+            final int DELETE_PASSENGER = 6;
+            final int EXIT = 7;
 
-            Scanner keyboard = new Scanner(System.in);
             int option = 0;
             do {
                 System.out.println("\n" + MENU_ITEMS);
@@ -124,11 +132,12 @@ public class AppMenu {
                             System.out.println("Find Passenger by Name");
                             System.out.println("Enter passenger name: ");
                             String name = keyboard.nextLine();
-                            Passenger p = passengerStore.findPassengerByName(name);
-                            if (p == null)
+                            ArrayList<Passenger> pByName = passengerStore.findPassengerByName(name);
+                            for(Passenger p : pByName){
+                                System.out.println(p);
+                            }
+                            if (pByName.size()==0)
                                 System.out.println("No passenger matching the name \"" + name + "\"");
-                            else
-                                System.out.println("Found passenger: \n" + p.toString());
                             break;
                         case ADD_PASSENGER:
                             displayAddPassengerMenu();
@@ -139,6 +148,12 @@ public class AppMenu {
                             for(Passenger ps : passengerSort) {
                                 System.out.println(ps.toString());
                             }
+                            break;
+                        case EDIT_PASSENGER:
+                            passengerStore.editPassenger();
+                            break;
+                        case DELETE_PASSENGER:
+                            deletePassenger();
                             break;
                         case EXIT:
                             System.out.println("Exit Menu option chosen");
@@ -154,13 +169,28 @@ public class AppMenu {
             } while (option != EXIT);
 
         }
+
+        public void deletePassenger(){
+            Scanner keyboard = new Scanner(System.in);
+            try {
+                System.out.println("Enter Passenger Id");
+                int pId = keyboard.nextInt();
+                passengerStore.deletePassenger(pId);
+            }
+            catch (InputMismatchException e){
+                System.out.println("Invalid - Id is not a Number");
+            }
+        }
         //sub menu to add passenger
         public void displayAddPassengerMenu(){
             Scanner keyboard = new Scanner(System.in);
                 try {
                     System.out.println("Enter passenger details: ");
-                    System.out.println("Passenger Name");
-                    String pName = keyboard.nextLine();
+                    System.out.println("Passenger First Name");
+                    String fName = keyboard.nextLine();
+                    System.out.println("Passenger First Name");
+                    String lName = keyboard.nextLine();
+                    String pName = fName+" "+lName;
                     System.out.println("Passenger Email");
                     String pEmail = keyboard.nextLine();
                     System.out.println("Latitude");
@@ -179,13 +209,14 @@ public class AppMenu {
 
         //Vehicle Sub menu
         public void displayVehicleMenu(){
+            Scanner kb = new Scanner(System.in);
             final String MENU_ITEMS = "\n*** VEHICLE MENU ***\n"
                     + "1. Show all Vehicles\n"
                     + "2. Find by Registration Number\n"
                     + "3. Display Vehicle by Type\n"
                     + "4. Add Vehicle\n"
                     + "5. Sort by Registration Number\n"
-                    + "6. Delete Vehicle by - ID\n"
+                    + "6. Delete Vehicle\n"
                     + "7. Exit\n"
                     + "Enter Option [1,3]";
 
@@ -239,7 +270,13 @@ public class AppMenu {
                             }
                             break;
                         case DELETE_VEHICLE:
-                            displayDeleteMenu();
+                            System.out.println("Enter Vehicle Id to be deleted");
+                            try{
+                            int vId = kb.nextInt();
+                            vehicleManager.deleteVehicleById(vId);
+                            }catch (InputMismatchException e){
+                                System.out.println("Invalid - Id is not a Number");
+                            }
                             break;
                         case EXIT:
                             System.out.println("Exit Menu option chosen");
@@ -298,30 +335,31 @@ public class AppMenu {
                 System.out.println();
             }
     }
-    //delete vehicle Submenu
-    public void displayDeleteMenu(){
-        Scanner kb = new Scanner(System.in);
-        System.out.println("Enter ID of Vehicle to be Deleted");
-        try {
-            int id = kb.nextInt();
-            vehicleManager.deleteVehicleById(id);
-        }catch (InputMismatchException e){
-            System.out.println("Invalid ID");
-        }
-
-    }
 
     //Booking Sub Menu
     public void displayBookingMenu(){
+        Scanner kb = new Scanner(System.in);
         final String MENU_ITEMS = "\n*** BOOKING MENU ***\n"
                 + "1. Show all bookings\n"
-                + "2. Sort by Cost\n"
-                + "3. Exit\n"
-                + "Enter Option [1,4]";
+                + "2. Add Booking\n"
+                + "3. Sort by Date Time\n"
+                + "4. Sort by Cost\n"
+                + "5. Edit Booking\n"
+                + "6. Cancel Booking\n"
+                + "7. view Future Bookings - Sorted by DateTime\n"
+                + "8. view Bookings for a Passenger - Sorted by DateTime\n"
+                + "9. Exit\n"
+                + "Enter Option [1,9]";
 
         final int SHOW_ALL = 1;
-        final int SORT_COST = 2;
-        final int EXIT = 3;
+        final int ADD_BOOKING = 2;
+        final int SORT_DATE = 3;
+        final int SORT_COST = 4;
+        final int EDIT_BOOKING = 5;
+        final int CANCEL_BOOKING = 6;
+        final int FUTURE_BOOKING = 7;
+        final int PASSENGER_BOOK = 8;
+        final int EXIT = 9;
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -335,11 +373,48 @@ public class AppMenu {
                         System.out.println("Display ALL bookings");
                         bookingManager.displayAllBookings();
                         break;
+                    case ADD_BOOKING:
+                        displayAddBookingMenu();
+                        break;
+                    case SORT_DATE:
+                        System.out.println("--Bookings Ordered By Date--");
+                        ArrayList<Booking> bookingSortDate = bookingManager.sortByDateTime();
+                        for(Booking bs : bookingSortDate) {
+                            System.out.println(bs.toString());
+                        }
+                        break;
                     case SORT_COST:
                         System.out.println("--Bookings Ordered By Cost--");
                         ArrayList<Booking> bookingSort = bookingManager.sortByCost();
                         for(Booking bs : bookingSort) {
                             System.out.println(bs.toString());
+                        }
+                        break;
+                    case EDIT_BOOKING:
+                        bookingManager.editBooking();
+                        break;
+                    case CANCEL_BOOKING:
+                        System.out.println("Enter Booking ID to be deleted");
+                        try {
+                            int bId = kb.nextInt();
+                            bookingManager.deleteBookingById(bId);
+                        }catch(InputMismatchException e){
+                            System.out.println("Invalid - Id is not a number");
+                        }
+                        break;
+                    case FUTURE_BOOKING:
+                        ArrayList<Booking> futureBook = bookingManager.displayFutureBookings();
+                        for(Booking b: futureBook){
+                            System.out.println(b);
+                        }
+                        break;
+                    case PASSENGER_BOOK:
+                        System.out.println("--BOOKING BY PASSENGER");
+                        System.out.println("Enter Passenger Id");
+                        int passId = kb.nextInt();
+                        ArrayList<Booking> bookpass = bookingManager.displayBookingByPassenger(passId);
+                        for(Booking b: bookpass){
+                            System.out.println(b);
                         }
                         break;
                     case EXIT:
@@ -350,10 +425,41 @@ public class AppMenu {
                         break;
                 }
 
-            } catch (InputMismatchException | NumberFormatException e) {
+            } catch (InputMismatchException | NumberFormatException | IOException e) {
                 System.out.print("Invalid option - please enter number in range");
             }
         } while (option != EXIT);
 
     }
+    public void displayAddBookingMenu(){
+        Scanner kb = new Scanner(System.in);
+        System.out.println("Enter passenger Id");
+        int passengerId = kb.nextInt();
+        System.out.println("Enter vehicle Id");
+        int vehicleId = kb.nextInt();
+        System.out.println("Enter Year");
+        int year = kb.nextInt();
+        System.out.println("Enter Month");
+        int month = kb.nextInt();
+        System.out.println("Enter Day");
+        int day = kb.nextInt();
+        System.out.println("Enter Hour");
+        int hour= kb.nextInt();
+        System.out.println("Enter Minutes");
+        int min= kb.nextInt();
+        System.out.println("Enter Seconds");
+        int sec= kb.nextInt();
+        System.out.println("Enter Start Latitude");
+        double startLatitude = kb.nextDouble();
+        System.out.println("Enter End Latitude");
+        double endLatitude= kb.nextDouble();
+        System.out.println("Enter Start Longitude");
+        double startLongitude= kb.nextDouble();
+        System.out.println("Enter End Longitude");
+        double endLongitude= kb.nextDouble();
+
+        bookingManager.addBooking(passengerId,vehicleId,year,month,day,hour,min,sec,startLatitude,endLatitude,startLongitude,endLongitude);
+
+    }
+
 }

@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class VehicleManager {
@@ -105,6 +106,15 @@ sc.close();
         return vehicleTypeList;
     }
 
+    public Vehicle findByVehicleId(int id){
+        for(Vehicle v: vehicleList) {
+            if (id==v.getId()){
+                return v;
+            }
+        }
+        return null;
+    }
+
     public ArrayList<Vehicle> sortByRegNum() {
         ArrayList<Vehicle> vehicleSortList = new ArrayList<>();
         vehicleSortList.addAll(vehicleList);
@@ -162,34 +172,55 @@ sc.close();
     }
 
     public void deleteVehicleById(int id){
+        boolean found = false;
         for(Vehicle v : vehicleList) {
-            if(id == v.getId()) {
+            if (id == v.getId()) {
                 vehicleList.remove(v);
                 System.out.println("Vehicle Deleted");
+                found = true;
                 break;
             }
-
         }
-
+        if(found==false){
+            System.out.println("Cannot be Deleted");
+        }
     }
 
 
-    public void storeToFile() throws IOException {
-            FileWriter fWriter = null;
-            fWriter = new FileWriter("vehicles.txt");
-            for(Vehicle v : vehicleList) {
-                 if(v instanceof Car){
-                    fWriter.write(v.getId()+","+v.getType()+","+v.getMake()+","+v.getModel()+","+v.getMilesPerKm()+","+v.getRegistration()+","+v.getCostPerMile()+","+v.getLastServicedDate().getYear()+","+Integer.parseInt(v.getLastServicedDate().getMonth().toString())+","+v.getLastServicedDate().getDayOfMonth()+","+v.getMileage()+","+v.getDepotGPSLocation().getLatitude()+","+v.getDepotGPSLocation().getLongitude()+","+","+((Car) v).getNumberOfSeats()+"\n");
-                }
-                 if(v instanceof Van){
-                     fWriter.write(v.getId()+","+v.getType()+","+v.getMake()+","+v.getModel()+","+v.getMilesPerKm()+","+v.getRegistration()+","+v.getCostPerMile()+","+v.getLastServicedDate().getYear()+","+Integer.parseInt(v.getLastServicedDate().getMonth().toString())+","+v.getLastServicedDate().getDayOfMonth()+","+v.getMileage()+","+v.getDepotGPSLocation().getLatitude()+","+v.getDepotGPSLocation().getLongitude()+","+","+((Van) v).getLoadSpace()+"\n");
+    public void storeToFileVehicle() throws IOException {
 
+        FileWriter fWriter = new FileWriter("vehicles.txt");
+        String output = "";
+
+            for(Vehicle v : vehicleList) {
+
+                int id = v.getId();
+                String type = v.getType();  // vehicle type
+                String make = v.getMake();
+                String model = v.getModel();
+                double milesPerKwH = v.getMilesPerKm();
+                String registration = v.getRegistration();
+                double costPerMile = v.getCostPerMile();
+                int year = v.getLastServicedDate().getYear();
+                int month = v.getLastServicedDate().getMonthValue();
+                int day = v.getLastServicedDate().getDayOfMonth();
+                int mileage =v.getMileage();
+                double latitude = v.getDepotGPSLocation().getLatitude();
+                double longitude = v.getDepotGPSLocation().getLongitude();
+                output = id+","+type+"," +make+"," +model+"," +milesPerKwH+"," +registration+"," +costPerMile+"," +year+"," +month+"," +day+"," +mileage+"," +latitude+"," +longitude;
+
+                 if(v instanceof Car){
+                  output+="," +((Car) v).getNumberOfSeats();
                  }
-                fWriter = null;
+                 if(v instanceof Van){
+                     output+="," +((Van) v).getLoadSpace();
+                 }
+                fWriter.append(output+"\n");
             }
             fWriter.close();
 
-            System.out.println("Changes applied to the File");
+            System.out.println("Changes applied to the vehicle" +
+                    " File");
         }
 
 }
