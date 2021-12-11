@@ -48,8 +48,6 @@ public class Van extends Vehicle
 
     @Override
     public String toString() {
-        return "Van{" +
-                "loadSpace=" + loadSpace +
-                "} " + super.toString();
+        return super.toString() + String.format("%8.4f",this.loadSpace) ;
     }
 }

@@ -125,6 +125,7 @@ public class PassengerStore {
 
         System.out.println("Changes applied to the passenger File");
     }
+
     public void editPassenger(){
         System.out.println("Enter your passenger Id");
         Scanner kb = new Scanner(System.in);
@@ -212,13 +213,13 @@ public class PassengerStore {
         for(Passenger p : passengerList) {
             if (id == p.getId()) {
                 passengerList.remove(p);
-                System.out.println("Vehicle Deleted");
+                System.out.println("Passenger Deleted");
                 found = true;
                 break;
             }
         }
         if(found==false){
-            System.out.println("Cannot be Deleted");
+            System.out.println("Cannot be Deleted - Passenger not found");
         }
     }
 

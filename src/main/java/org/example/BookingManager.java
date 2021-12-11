@@ -148,7 +148,7 @@ public class BookingManager implements Serializable
             }
         }
         if (found==false){
-            System.out.println("Booking Cannot Cancelled");
+            System.out.println("Booking Cannot be Cancelled - Not found");
         }
     }
 

@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Scanner;
+import java.util.*;
 
 public class VehicleManager {
     private final ArrayList<Vehicle> vehicleList;  // for Car and Van objects
@@ -113,6 +110,17 @@ sc.close();
             }
         }
         return null;
+    }
+
+    public List<Vehicle> filterBy(IFilter filter)            // I stands for Interface
+    {
+        List<Vehicle> filteredList = new ArrayList<>();
+        for (Vehicle v : this.vehicleList) {
+            if (filter.matches(v))    // use matches() method of the filter to match products
+                filteredList.add(v);
+        }
+
+        return filteredList;
     }
 
     public ArrayList<Vehicle> sortByRegNum() {

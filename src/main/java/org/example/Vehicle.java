@@ -156,13 +156,14 @@ public abstract class Vehicle implements Comparable<Vehicle>
     @Override
     public String toString()
     {
-        return this.getClass().getSimpleName() + "{" +"id:"+ this.id + ", type:"+type+ ", make=" + make + ", model=" + model
-                + ", milesPerKm=" + milesPerKwH +  ", registration=" + registration
-                + ", costPerMile=" + costPerMile + ", lastServicedDate="
-                + lastServicedDate + ", mileage=" + mileage + ", depotGPSLocation="
-                + depotGPSLocation + '}';
+//        return this.getClass().getSimpleName() + "{" +"id:"+ this.id + ", type:"+type+ ", make=" + make + ", model=" + model
+//                + ", milesPerKm=" + milesPerKwH +  ", registration=" + registration
+//                + ", costPerMile=" + costPerMile + ", lastServicedDate="
+//                + lastServicedDate + ", mileage=" + mileage + ", depotGPSLocation="
+//                + depotGPSLocation + '}';
+
+        return String.format("%-5d %-6s %-10s %-15s %-15s %-15s %-10s %-13s %-10s %-10s",this.id,this.type,this.make,this.model,this.milesPerKwH,this.registration,this.costPerMile,this.getLastServicedDate().getYear(),this.getLastServicedDate().getMonthValue(),this.getLastServicedDate().getDayOfMonth(),this.mileage,this.getDepotGPSLocation().getLatitude(),this.getDepotGPSLocation().getLongitude());
     }
 
 
-     
 }

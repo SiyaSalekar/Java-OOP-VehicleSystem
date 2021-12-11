@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class AppMenu {
@@ -27,6 +28,8 @@ public class AppMenu {
 
             //create BookingManager, and load all bookings from bookings.txt file
             bookingManager = new BookingManager("bookings.txt",passengerStore,vehicleManager);
+
+
 
             try {
                 displayMainMenu();        // User Interface - Menu
@@ -99,6 +102,7 @@ public class AppMenu {
 
         private void displayPassengerMenu() {
             Scanner keyboard = new Scanner(System.in);
+            Scanner kb = new Scanner(System.in);
             final String MENU_ITEMS = "\n*** PASSENGER MENU ***\n"
                     + "1. Show all Passengers\n"
                     + "2. Find Passenger by Name\n"
@@ -121,7 +125,7 @@ public class AppMenu {
             do {
                 System.out.println("\n" + MENU_ITEMS);
                 try {
-                    String usersInput = keyboard.nextLine();
+                    String usersInput = kb.nextLine();
                     option = Integer.parseInt(usersInput);
                     switch (option) {
                         case SHOW_ALL:
@@ -153,7 +157,14 @@ public class AppMenu {
                             passengerStore.editPassenger();
                             break;
                         case DELETE_PASSENGER:
-                            deletePassenger();
+                            try {
+                                System.out.println("Enter Passenger Id");
+                                int pId = keyboard.nextInt();
+                                passengerStore.deletePassenger(pId);
+                            }
+                            catch (InputMismatchException e){
+                                System.out.println("Id is not a Number");
+                            }
                             break;
                         case EXIT:
                             System.out.println("Exit Menu option chosen");
@@ -170,17 +181,7 @@ public class AppMenu {
 
         }
 
-        public void deletePassenger(){
-            Scanner keyboard = new Scanner(System.in);
-            try {
-                System.out.println("Enter Passenger Id");
-                int pId = keyboard.nextInt();
-                passengerStore.deletePassenger(pId);
-            }
-            catch (InputMismatchException e){
-                System.out.println("Invalid - Id is not a Number");
-            }
-        }
+
         //sub menu to add passenger
         public void displayAddPassengerMenu(){
             Scanner keyboard = new Scanner(System.in);
@@ -207,57 +208,41 @@ public class AppMenu {
 
         }
 
+
         //Vehicle Sub menu
         public void displayVehicleMenu(){
-            Scanner kb = new Scanner(System.in);
+
             final String MENU_ITEMS = "\n*** VEHICLE MENU ***\n"
                     + "1. Show all Vehicles\n"
-                    + "2. Find by Registration Number\n"
-                    + "3. Display Vehicle by Type\n"
-                    + "4. Add Vehicle\n"
-                    + "5. Sort by Registration Number\n"
-                    + "6. Delete Vehicle\n"
-                    + "7. Exit\n"
-                    + "Enter Option [1,3]";
+                    + "2. Filter Vehicle by\n"
+                    + "3. Add Vehicle\n"
+                    + "4. Sort by Registration Number\n"
+                    + "5. Delete Vehicle\n"
+                    + "6. Exit\n"
+                    + "Enter Option [1,8]";
 
             final int SHOW_ALL = 1;
-            final int FIND_BY_REGNUM = 2;
-            final int FIND_BY_TYPE = 3;
-            final int ADD_VEHICLE = 4;
-            final int SORT_BY_REG_NUM = 5;
-            final int DELETE_VEHICLE = 6;
-            final int EXIT = 7;
+            final int FILTER = 2;
+            final int ADD_VEHICLE = 3;
+            final int SORT_BY_REG_NUM = 4;
+            final int DELETE_VEHICLE = 5;
+            final int EXIT = 6;
 
             Scanner keyboard = new Scanner(System.in);
+            Scanner kb= new Scanner(System.in);
             int option = 0;
             do {
                 System.out.println("\n" + MENU_ITEMS);
                 try {
-                    String usersInput = keyboard.nextLine();
+                    String usersInput = kb.nextLine();
                     option = Integer.parseInt(usersInput);
                     switch (option) {
                         case SHOW_ALL:
                             System.out.println("Display ALL Vehicles");
                             vehicleManager.displayAllVehicles();
                             break;
-                        case FIND_BY_REGNUM:
-                            System.out.println("Find Vehicle by registration number");
-                            System.out.println("Enter Vehicle registration number: ");
-                            String regNum = keyboard.nextLine();
-                            Vehicle v = vehicleManager.findByRegistrationNumber(regNum);
-                            if (v == null)
-                                System.out.println("No vehicle matching the number \"" + regNum + "\"");
-                            else
-                                System.out.println("Found Vehicle: \n" + v.toString());
-                            break;
-                        case FIND_BY_TYPE:
-                            System.out.println("Find Vehicle by Type");
-                            System.out.println("Enter Vehicle Type: ");
-                            String type = keyboard.nextLine();
-                            ArrayList<Vehicle> vehicleTypeList =vehicleManager.findByType(type);
-                            for(Vehicle vType: vehicleTypeList){
-                                System.out.println(vType.toString());
-                            }
+                        case FILTER:
+                            vehicleFilterSubMenu();
                             break;
                         case ADD_VEHICLE:
                             displayAddVehicleMenu();
@@ -272,7 +257,7 @@ public class AppMenu {
                         case DELETE_VEHICLE:
                             System.out.println("Enter Vehicle Id to be deleted");
                             try{
-                            int vId = kb.nextInt();
+                            int vId = keyboard.nextInt();
                             vehicleManager.deleteVehicleById(vId);
                             }catch (InputMismatchException e){
                                 System.out.println("Invalid - Id is not a Number");
@@ -291,6 +276,105 @@ public class AppMenu {
                 }
             } while (option != EXIT);
         }
+
+        //filtering options
+    public void vehicleFilterSubMenu(){
+        Scanner kb = new Scanner(System.in);
+        final String MENU_ITEMS = "\n*** VEHICLE FILTER MENU ***\n"
+                + "1. Number Of Seats\n"
+                + "2. Type\n"
+                + "3. Load Space\n"
+                + "4. Registration Number\n"
+                + "5. Exit \n"
+                + "Enter Option [1,5]";
+
+        final int NUM_SEATS = 1;
+        final int TYPE = 2;
+        final int LOAD_SPACE = 3;
+        final int REG_NUM = 4;
+        final int EXIT = 5;
+        Scanner keyB =new Scanner(System.in);
+        int option = 0;
+        do {
+            System.out.println("\n" + MENU_ITEMS);
+            try {
+                String usersInput = keyB .nextLine();
+                option = Integer.parseInt(usersInput);
+                switch (option) {
+                    case NUM_SEATS:
+                        try{
+                            System.out.println("Find Vehicle by Num Seats");
+                            System.out.println("Enter Vehicle Number of Seats: ");
+                            int numSeats = kb.nextInt();
+                            System.out.println("--Filter by Seats--");
+                            List<Vehicle> seatList = vehicleManager.filterBy(new NumberOfSeatFilter(numSeats));
+                            if(seatList.size()==0){
+                                System.out.println("No vehicles found");
+                            }else{
+                            for(Vehicle st:seatList) {
+                                System.out.println(st);
+                            }}
+                        }catch (InputMismatchException e){
+                            System.out.println("Invalid Seat Number");
+                        }
+                        break;
+                    case TYPE:
+                        System.out.println("Find Vehicle by Type");
+                        System.out.println("Enter Vehicle Type: ");
+                        String type = kb.nextLine();
+                        System.out.println("--Filter by Type--");
+                        List<Vehicle> typeList = vehicleManager.filterBy(new VehicleTypeFilter(type));
+                        if(typeList.size()==0){
+                            System.out.println("No vehicles found");
+                        }else{
+                        for(Vehicle vt:typeList) {
+                            System.out.println(vt);
+                        }}
+                        break;
+                    case LOAD_SPACE:
+                        try{
+                        System.out.println("Find Vehicle by Load Space");
+                        System.out.println("Enter Vehicle Load Space: ");
+                        double loadSpace = kb.nextDouble();
+                        System.out.println("--Filter by Load Space--");
+                        List<Vehicle> loadList = vehicleManager.filterBy(new LoadSpaceFilter(loadSpace));
+                        if(loadList.size()==0){
+                            System.out.println("No vehicles found");
+                        }else{
+                        for(Vehicle lt:loadList) {
+                            System.out.println(lt);
+                        }}
+                        }catch (InputMismatchException e){
+                            System.out.println("Invalid Load Space");
+                        }
+                        break;
+                    case REG_NUM:
+                        System.out.println("Find Vehicle by Registration Number");
+                        System.out.println("Enter Vehicle Registration Number: ");
+                        String regNum = kb.nextLine();
+                        System.out.println("--Filter by Registration Number--");
+                        List<Vehicle> regList = vehicleManager.filterBy(new RegistrationNumberFilter(regNum));
+                        if(regList.size()==0){
+                            System.out.println("No vehicles found");
+                        }else{
+                        for(Vehicle rg:regList) {
+                            System.out.println(rg);
+                        }}
+                        break;
+                    case EXIT:
+                        System.out.println("Exit Menu option chosen");
+                        break;
+                    default:
+                        System.out.print("Invalid option");
+                        break;
+                }
+
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.print("Invalid input");
+            }
+
+        } while (option != EXIT);
+    }
 
         //Vehicle sub menu for add vehicle
     public void displayAddVehicleMenu(){
@@ -391,7 +475,11 @@ public class AppMenu {
                         }
                         break;
                     case EDIT_BOOKING:
+                        try{
                         bookingManager.editBooking();
+                        }catch (InputMismatchException e){
+                            System.out.println("Input invalid");
+                        }
                         break;
                     case CANCEL_BOOKING:
                         System.out.println("Enter Booking ID to be deleted");
