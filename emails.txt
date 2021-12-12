@@ -1,0 +1,2 @@
+Email{To='john.smith@gmail.com', Subject='Booking', Text='Hello John Smith! 
+You have booked - ID:105   Type:Van    Make:Fiat       Model:Runround        milesPerKm:6.0             registration:151D987105      costPerMile:6.0        Year:2020          Month:12         Day:15         mileage:100034     Lat:53.3456    Long:-6.3421   LoadSpace:140.5000', Date=2021-12-12}

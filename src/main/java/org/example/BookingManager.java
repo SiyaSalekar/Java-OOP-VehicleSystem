@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class BookingManager implements Serializable
+public class BookingManager
 {
     private final ArrayList<Booking> bookingList;
     private final PassengerStore passengerStore;
@@ -75,8 +75,6 @@ public class BookingManager implements Serializable
     public String addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int min, int sec, double startLatitude, double endLatitude, double startLongitude, double endLongitude){
         Vehicle v = vehicleManager.findByVehicleId(vehicleId);
         Passenger p = passengerStore.findPassengerById(passengerId);
-        // Create New Email Object
-        Email email = new Email(vehicleManager, passengerStore);
         if(v!=null && p!=null) {
             if(checkAvailability(vehicleId,year,month,day)) {
 
@@ -94,7 +92,19 @@ public class BookingManager implements Serializable
                 bookingList.add(new Booking(passengerId, vehicleId,
                         year, month, day, hour, min, sec, startLatitude, endLatitude, startLongitude, endLongitude, cost));
                 System.out.println();
+
+//---------
+                //New Email Object
+                Email email = new Email(passengerId, vehicleId, vehicleManager, passengerStore);
                 email.sendBookingEmail(vehicleId,passengerId);
+                //inserting emails in emails.txt
+                try {
+                    email.loadToFile(email);
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }
+//---------
+
                 System.out.println();
                 return "booked successfully";
 
@@ -200,6 +210,7 @@ public class BookingManager implements Serializable
         Collections.sort(bookingByPassenger, bComp);
         return bookingByPassenger;
     }
+
     //sort methods using comparator
 
     public ArrayList<Booking> sortByDateTime(){
