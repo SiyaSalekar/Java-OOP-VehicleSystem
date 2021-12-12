@@ -123,14 +123,13 @@ sc.close();
         return filteredList;
     }
 
-    public ArrayList<Vehicle> sortByRegNum() {
-        ArrayList<Vehicle> vehicleSortList = new ArrayList<>();
-        vehicleSortList.addAll(vehicleList);
-        Collections.sort(vehicleSortList);
-        return vehicleSortList;
+    public ArrayList<Vehicle> sortByRegNum(){
+        ArrayList<Vehicle> vehicleSort = new ArrayList<>();
+        vehicleSort.addAll(vehicleList);
+        VehicleRegistrationNumberComparator vComp = new VehicleRegistrationNumberComparator();
+        Collections.sort(vehicleSort, vComp);
+        return vehicleSort;
     }
-
-
 
     public void addVehicle(String type, String make, String model, double milesPerKwH,
                            String registration, double costPerMile,

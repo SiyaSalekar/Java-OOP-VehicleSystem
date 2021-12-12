@@ -25,6 +25,10 @@ public class App
     {
         // Run the App
         AppMenu app = new AppMenu();
+        //Start
         app.start();
+        //Close also Saves data into Files
+        app.close();
+
     }
 }

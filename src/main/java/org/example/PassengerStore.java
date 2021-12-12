@@ -95,10 +95,20 @@ public class PassengerStore {
         return null;
     }
 
+
     public ArrayList<Passenger> sortByName(){
         ArrayList<Passenger> passengerSort = new ArrayList<>();
         passengerSort.addAll(passengerList);
-        Collections.sort(passengerSort);
+        PassengerNameComparator pComp = new PassengerNameComparator();
+        Collections.sort(passengerSort, pComp);
+        return passengerSort;
+    }
+
+    public ArrayList<Passenger> sortByPhone(){
+        ArrayList<Passenger> passengerSort = new ArrayList<>();
+        passengerSort.addAll(passengerList);
+        PassengerPhoneComparator psComp = new PassengerPhoneComparator();
+        Collections.sort(passengerSort, psComp);
         return passengerSort;
     }
 

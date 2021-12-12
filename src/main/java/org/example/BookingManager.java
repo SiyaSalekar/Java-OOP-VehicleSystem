@@ -1,7 +1,6 @@
 package org.example;
 
 
-import java.awt.print.Book;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -73,15 +72,11 @@ public class BookingManager implements Serializable
             System.out.println(b.toString());
     }
 
-    public ArrayList<Booking> sortByCost(){
-        ArrayList<Booking> bookingSort = new ArrayList<>();
-        bookingSort.addAll(bookingList);
-        Collections.sort(bookingSort);
-        return bookingSort;
-    }
-    public void addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int min, int sec, double startLatitude, double endLatitude, double startLongitude, double endLongitude){
+    public String addBooking(int passengerId, int vehicleId, int year, int month, int day, int hour, int min, int sec, double startLatitude, double endLatitude, double startLongitude, double endLongitude){
         Vehicle v = vehicleManager.findByVehicleId(vehicleId);
         Passenger p = passengerStore.findPassengerById(passengerId);
+        // Create New Email Object
+        Email email = new Email(vehicleManager, passengerStore);
         if(v!=null && p!=null) {
             if(checkAvailability(vehicleId,year,month,day)) {
 
@@ -98,22 +93,27 @@ public class BookingManager implements Serializable
                 //add booking
                 bookingList.add(new Booking(passengerId, vehicleId,
                         year, month, day, hour, min, sec, startLatitude, endLatitude, startLongitude, endLongitude, cost));
-                System.out.println("Booked Successfully");
+                System.out.println();
+                email.sendBookingEmail(vehicleId,passengerId);
+                System.out.println();
+                return "booked successfully";
+
             }
             else{
                 //if null
-                System.out.println("Vehicle already booked for the day - Booking failed");
+                return "Vehicle already booked for the day - Booking failed";
             }
 
         }
         else{
             if(p==null) {
-                System.out.println("Passenger to be booked does not exist - Cannot be booked");
+               return "Passenger to be booked does not exist - Cannot be booked";
             }
             if (v == null) {
-                System.out.println("Vehicle to be booked does not exist - Cannot be booked");
+                return "Vehicle to be booked does not exist - Cannot be booked";
             }
         }
+        return "";
 
     }
     public void displayIDList(){
@@ -200,11 +200,19 @@ public class BookingManager implements Serializable
         Collections.sort(bookingByPassenger, bComp);
         return bookingByPassenger;
     }
+    //sort methods using comparator
 
     public ArrayList<Booking> sortByDateTime(){
         ArrayList<Booking> bookingSort = new ArrayList<>();
         bookingSort.addAll(bookingList);
         BookingDateComparator bComp = new BookingDateComparator();
+        Collections.sort(bookingSort, bComp);
+        return bookingSort;
+    }
+    public ArrayList<Booking> sortByCost(){
+        ArrayList<Booking> bookingSort = new ArrayList<>();
+        bookingSort.addAll(bookingList);
+        BookCostComparator bComp = new BookCostComparator();
         Collections.sort(bookingSort, bComp);
         return bookingSort;
     }
