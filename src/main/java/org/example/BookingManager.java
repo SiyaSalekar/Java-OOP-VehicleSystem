@@ -1,6 +1,7 @@
 package org.example;
 
 
+import java.awt.print.Book;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -83,12 +84,23 @@ public class BookingManager implements Serializable
         Passenger p = passengerStore.findPassengerById(passengerId);
         if(v!=null && p!=null) {
             if(checkAvailability(vehicleId,year,month,day)) {
-                double cost = this.getDist(startLatitude, startLongitude, endLatitude, endLongitude) * v.getCostPerMile();
+
+                //cost
+                double depotLat = v.getDepotGPSLocation().getLatitude();
+                double depotLong= v.getDepotGPSLocation().getLongitude();
+                double dist = distance(depotLat,startLatitude,depotLong,startLongitude);
+                dist+=distance(startLatitude,endLatitude,startLongitude, endLongitude);
+                dist+=distance(endLatitude,depotLat,endLongitude,depotLong);
+
+                double cost = dist*v.getCostPerMile();
+
+                //add booking
                 bookingList.add(new Booking(passengerId, vehicleId,
                         year, month, day, hour, min, sec, startLatitude, endLatitude, startLongitude, endLongitude, cost));
                 System.out.println("Booked Successfully");
             }
             else{
+                //if null
                 System.out.println("Vehicle already booked for the day - Booking failed");
             }
 
@@ -103,12 +115,31 @@ public class BookingManager implements Serializable
         }
 
     }
-    public double calcDist(){
-
-        return 0;
-    }
     public void displayIDList(){
-
+        ArrayList <Passenger> passengerList= passengerStore.getAllPassengers();
+        ArrayList <Vehicle> vehicleList= vehicleManager.getVehicleList();
+        System.out.println();
+        System.out.println("--Choose From--");
+        System.out.println();
+        System.out.println("PASSENGERS");
+        System.out.printf("%-5s %-6s","ID","Name");
+        System.out.println();
+        System.out.println("-------------------");
+        for(Passenger p : passengerList){
+            System.out.printf("%-5d %-6s",p.getId(),p.getName());
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println("VEHICLES");
+        System.out.printf("%-5s %-6s %-6s","ID","Type","Model");
+        System.out.println();
+        System.out.println("---------------------");
+        for(Vehicle v : vehicleList){
+            System.out.printf("%-5d %-6s %-6s",v.getId(),v.getType(),v.getModel());
+            System.out.println();
+        }
+        System.out.println();
+        System.out.println();
     }
 
     public ArrayList<Booking> displayBookingByPassenger(int passengerId){
@@ -175,20 +206,32 @@ public class BookingManager implements Serializable
         }
         return null;
     }
-    public double getDist(double lat1, double lon1, double lat2, double lon2){
-        double dLat = deg2rad(lat2-lat1);  // deg2rad below
-        double dLon = deg2rad(lon2-lon1);
-        double a =
-                Math.sin(dLat/2) * Math.sin(dLat/2) +
-                        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
-                                Math.sin(dLon/2) * Math.sin(dLon/2)
-                ;
-        double d = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return d;
+
+
+    public double distance(double lat1, double lat2, double lon1, double lon2)
+    {
+        lon1 = Math.toRadians(lon1);
+        lon2 = Math.toRadians(lon2);
+        lat1 = Math.toRadians(lat1);
+        lat2 = Math.toRadians(lat2);
+
+        double dlon = lon2 - lon1;
+        double dlat = lat2 - lat1;
+        double a = Math.pow(Math.sin(dlat / 2), 2)
+                + Math.cos(lat1) * Math.cos(lat2)
+                * Math.pow(Math.sin(dlon / 2),2);
+
+        double c = 2 * Math.asin(Math.sqrt(a));
+
+       //in miles
+        double r = 3956;
+
+        return(c * r);
     }
-    public double deg2rad(double deg){
-        return deg * (Math.PI/180);
-    }
+
+
+
+
    //need for add
     public boolean checkAvailability(int vehicleId, int year, int month, int day){
         for(Booking b: bookingList){

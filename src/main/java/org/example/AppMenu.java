@@ -458,6 +458,7 @@ public class AppMenu {
                         bookingManager.displayAllBookings();
                         break;
                     case ADD_BOOKING:
+                        bookingManager.displayIDList();
                         displayAddBookingMenu();
                         break;
                     case SORT_DATE:
@@ -475,6 +476,7 @@ public class AppMenu {
                         }
                         break;
                     case EDIT_BOOKING:
+                        bookingManager.displayIDList();
                         try{
                         bookingManager.editBooking();
                         }catch (InputMismatchException e){
@@ -482,6 +484,7 @@ public class AppMenu {
                         }
                         break;
                     case CANCEL_BOOKING:
+                        bookingManager.displayIDList();
                         System.out.println("Enter Booking ID to be deleted");
                         try {
                             int bId = kb.nextInt();
@@ -497,6 +500,7 @@ public class AppMenu {
                         }
                         break;
                     case PASSENGER_BOOK:
+                        bookingManager.displayIDList();
                         System.out.println("--BOOKING BY PASSENGER");
                         System.out.println("Enter Passenger Id");
                         int passId = kb.nextInt();
@@ -520,6 +524,7 @@ public class AppMenu {
 
     }
     public void displayAddBookingMenu(){
+
         Scanner kb = new Scanner(System.in);
         System.out.println("Enter passenger Id");
         int passengerId = kb.nextInt();
