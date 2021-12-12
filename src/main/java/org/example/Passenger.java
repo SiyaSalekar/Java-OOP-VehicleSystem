@@ -107,9 +107,13 @@ public class Passenger implements Comparable<Passenger> {
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() + "{"
-                + "id=" + id + ", name=" + name + ", email="
-                + email + ", phone=" + phone + ", location="
-                + location + "}";
+//        return this.getClass().getSimpleName() + "{"
+//                + "id=" + id + ", name=" + name + ", email="
+//                + email + ", phone=" + phone + ", location="
+//                + location + "}";
+
+        //converted to formatted String
+        return String.format("ID:%-5d Name:%-15s Email:%-25s Phone:%-25s Lat:%-10s Long:%-10s",this.id,this.name,this.email,this.phone,this.getLocation().getLatitude(),this.getLocation().getLongitude());
+
     }
 }

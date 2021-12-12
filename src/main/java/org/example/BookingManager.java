@@ -85,13 +85,14 @@ public class BookingManager implements Serializable
         if(v!=null && p!=null) {
             if(checkAvailability(vehicleId,year,month,day)) {
 
-                //cost
+                //cost calculation
                 double depotLat = v.getDepotGPSLocation().getLatitude();
                 double depotLong= v.getDepotGPSLocation().getLongitude();
                 double dist = distance(depotLat,startLatitude,depotLong,startLongitude);
                 dist+=distance(startLatitude,endLatitude,startLongitude, endLongitude);
                 dist+=distance(endLatitude,depotLat,endLongitude,depotLong);
 
+                //total cost - distance in miles
                 double cost = dist*v.getCostPerMile();
 
                 //add booking
@@ -140,6 +141,46 @@ public class BookingManager implements Serializable
         }
         System.out.println();
         System.out.println();
+    }
+
+    public double getDist(int vehicleId, int passengerId, int bookingId){
+        Vehicle v = vehicleManager.findByVehicleId(vehicleId);
+        Passenger p = passengerStore.findPassengerById(passengerId);
+        Booking b = this.findBookingById(bookingId);
+        double dist=0;
+        if(v!=null && p!=null) {
+            double depotLat = v.getDepotGPSLocation().getLatitude();
+            double depotLong = v.getDepotGPSLocation().getLongitude();
+            double StartLat = b.getStartLocation().getLatitude();
+            double StartLong = b.getStartLocation().getLongitude();
+            double EndLat = b.getEndLocation().getLatitude();
+            double EndLong = b.getEndLocation().getLongitude();
+            dist += distance(depotLat, StartLat, depotLong, StartLong);
+            dist += distance(StartLat, EndLat, StartLong, EndLong);
+            dist += distance(EndLat, depotLat, EndLong, depotLong);
+        }else{
+            System.out.println("Vehicle not found");
+        }
+        return dist;
+    }
+
+    public Booking findBookingById(int id){
+        for(Booking b: bookingList) {
+            if (id==b.getBookingId()){
+                return b;
+            }
+        }
+        return null;
+    }
+
+    public double averageLengthJourney(){
+        double count =0;
+        double total=0;
+        for(Booking b: bookingList){
+            total+=getDist(b.getVehicleId(),b.getPassengerId(),b.getBookingId());
+            count++;
+        }
+        return total/count;
     }
 
     public ArrayList<Booking> displayBookingByPassenger(int passengerId){

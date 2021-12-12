@@ -161,9 +161,8 @@ public abstract class Vehicle implements Comparable<Vehicle>
 //                + ", costPerMile=" + costPerMile + ", lastServicedDate="
 //                + lastServicedDate + ", mileage=" + mileage + ", depotGPSLocation="
 //                + depotGPSLocation + '}';
-
-        return String.format("%-5d %-6s %-10s %-15s %-15s %-15s %-10s %-13s %-10s %-10s",this.id,this.type,this.make,this.model,this.milesPerKwH,this.registration,this.costPerMile,this.getLastServicedDate().getYear(),this.getLastServicedDate().getMonthValue(),this.getLastServicedDate().getDayOfMonth(),this.mileage,this.getDepotGPSLocation().getLatitude(),this.getDepotGPSLocation().getLongitude());
+        //converted to formatted String
+        return String.format("ID:%-5d Type:%-6s Make:%-10s Model:%-15s milesPerKm:%-15s registration:%-15s costPerMile:%-10s Year:%-13s Month:%-10s Day:%-10s mileage:%-10s Lat:%-10s Long:%-10s",this.id,this.type,this.make,this.model,this.milesPerKwH,this.registration,this.costPerMile,this.getLastServicedDate().getYear(),this.getLastServicedDate().getMonthValue(),this.getLastServicedDate().getDayOfMonth(),this.mileage,this.getDepotGPSLocation().getLatitude(),this.getDepotGPSLocation().getLongitude());
     }
-
 
 }

@@ -129,7 +129,8 @@ public class AppMenu {
                     option = Integer.parseInt(usersInput);
                     switch (option) {
                         case SHOW_ALL:
-                            System.out.println("Display ALL Passengers");
+                            System.out.println("Display All Passengers");
+                            System.out.println();
                             passengerStore.displayAllPassengers();
                             break;
                         case FIND_BY_NAME:
@@ -140,14 +141,17 @@ public class AppMenu {
                             for(Passenger p : pByName){
                                 System.out.println(p);
                             }
-                            if (pByName.size()==0)
+                            if (pByName.size()==0) {
+                                System.out.println();
                                 System.out.println("No passenger matching the name \"" + name + "\"");
+                            }
                             break;
                         case ADD_PASSENGER:
                             displayAddPassengerMenu();
                             break;
                         case SORT_NAME:
-                            System.out.println("--Passengers Ordered By Name--");
+                            System.out.println("Passengers Ordered By Name");
+                            System.out.println();
                             ArrayList<Passenger> passengerSort = passengerStore.sortByName();
                             for(Passenger ps : passengerSort) {
                                 System.out.println(ps.toString());
@@ -432,8 +436,9 @@ public class AppMenu {
                 + "6. Cancel Booking\n"
                 + "7. view Future Bookings - Sorted by DateTime\n"
                 + "8. view Bookings for a Passenger - Sorted by DateTime\n"
-                + "9. Exit\n"
-                + "Enter Option [1,9]";
+                + "9. Average length of Journey\n"
+                + "10. Exit\n"
+                + "Enter Option [1,10]";
 
         final int SHOW_ALL = 1;
         final int ADD_BOOKING = 2;
@@ -443,7 +448,8 @@ public class AppMenu {
         final int CANCEL_BOOKING = 6;
         final int FUTURE_BOOKING = 7;
         final int PASSENGER_BOOK = 8;
-        final int EXIT = 9;
+        final int AVG = 9;
+        final int EXIT = 10;
 
         Scanner keyboard = new Scanner(System.in);
         int option = 0;
@@ -454,7 +460,8 @@ public class AppMenu {
                 option = Integer.parseInt(usersInput);
                 switch (option) {
                     case SHOW_ALL:
-                        System.out.println("Display ALL bookings");
+                        System.out.println("Display All bookings");
+                        System.out.println();
                         bookingManager.displayAllBookings();
                         break;
                     case ADD_BOOKING:
@@ -462,14 +469,16 @@ public class AppMenu {
                         displayAddBookingMenu();
                         break;
                     case SORT_DATE:
-                        System.out.println("--Bookings Ordered By Date--");
+                        System.out.println("Bookings Ordered By Date");
+                        System.out.println();
                         ArrayList<Booking> bookingSortDate = bookingManager.sortByDateTime();
                         for(Booking bs : bookingSortDate) {
                             System.out.println(bs.toString());
                         }
                         break;
                     case SORT_COST:
-                        System.out.println("--Bookings Ordered By Cost--");
+                        System.out.println("Bookings Ordered By Cost");
+                        System.out.println();
                         ArrayList<Booking> bookingSort = bookingManager.sortByCost();
                         for(Booking bs : bookingSort) {
                             System.out.println(bs.toString());
@@ -495,6 +504,8 @@ public class AppMenu {
                         break;
                     case FUTURE_BOOKING:
                         ArrayList<Booking> futureBook = bookingManager.displayFutureBookings();
+                        System.out.println("Future Bookings");
+                        System.out.println();
                         for(Booking b: futureBook){
                             System.out.println(b);
                         }
@@ -505,9 +516,19 @@ public class AppMenu {
                         System.out.println("Enter Passenger Id");
                         int passId = kb.nextInt();
                         ArrayList<Booking> bookpass = bookingManager.displayBookingByPassenger(passId);
+                        if(bookpass.size()!=0){
                         for(Booking b: bookpass){
                             System.out.println(b);
                         }
+                        }else{
+                            System.out.println();
+                            System.out.println("No bookings for Passenger "+passId);
+                        }
+                        break;
+                    case AVG:
+                        double avg = bookingManager.averageLengthJourney();
+                        System.out.println("Average Length of Journeys is - ");
+                        System.out.printf("%3.4f",avg);
                         break;
                     case EXIT:
                         System.out.println("Exit Menu option chosen");

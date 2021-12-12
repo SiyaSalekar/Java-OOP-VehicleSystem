@@ -62,15 +62,22 @@ class Booking implements Comparable<Booking>
 
     @Override
     public String toString() {
-        return "Booking{" +
-                "bookingId=" + bookingId +
-                ", passengerId=" + passengerId +
-                ", vehicleId=" + vehicleId +
-                ", bookingDateTime=" + bookingDateTime +
-                ", startLocation=" + startLocation +
-                ", endLocation=" + endLocation +
-                ", cost=" + cost +
-                '}';
+//        return "Booking{" +
+//                "bookingId=" + bookingId +
+//                ", passengerId=" + passengerId +
+//                ", vehicleId=" + vehicleId +
+//                ", bookingDateTime=" + bookingDateTime +
+//                ", startLocation=" + startLocation +
+//                ", endLocation=" + endLocation +
+//                ", cost=" + cost +
+//                '}';
+       return String.format("BookingId:%-12d VehicleId:%-12d PassengerId:%-14d Year:%-8d Month:%-6d Day:%-6d Hour:%-7d Minute:%-7d StartLat:%-10s StartLong:%-10s EndLat:%-10s EndLong:%-10s Cost:%-6.4f",
+                this.bookingId,this.vehicleId,this.passengerId,this.getBookingDateTime().getYear(),
+                this.getBookingDateTime().getMonthValue(),this.getBookingDateTime().getDayOfMonth(),
+                this.getBookingDateTime().getHour(),this.getBookingDateTime().getMinute(),
+                this.getStartLocation().getLatitude(),this.getStartLocation().getLongitude(),
+                this.getEndLocation().getLatitude(),this.getEndLocation().getLongitude(),this.cost);
+
     }
 
 
